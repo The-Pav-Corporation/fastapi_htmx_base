@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: "fastapi_htmx_app"
+    build:
+      context: .
+    volumes:
+      - ./project:/app
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    ports:
+      - "8001:8001"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=app
+      - DB_USER=postgres
+      - DB_PASS=supersecretpassword
+    depends_on:
+      - db
+
+  db:
+    image: postgres:10-alpine
+    container_name: "fast_htmx_db"
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecretpassword
+    ports:
+      - "5432:5432"
