@@ -1,7 +1,7 @@
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from passlib.context import CryptContext
-from ...secrets import ULTRA_SECRET_KEY
+from .secrets import ULTRA_SECRET_KEY
 import jinja_partials
 
 BASE_DIR = Path(__file__).resolve().parent

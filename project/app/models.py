@@ -24,3 +24,14 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="items")
+
+
+class Problem(Base):
+    __tablename__ = "problems"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    description = Column(String, index=True)
+    input = Column(String, index=True, default=None)
+    solution = Column(String, index=True, default=None)
+    is_solved = Column(Boolean, default=False)
