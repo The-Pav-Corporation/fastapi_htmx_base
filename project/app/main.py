@@ -10,6 +10,8 @@ from .routers.problem import router as problem_router
 from . import models
 from .database import engine
 
+import logging
+
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.include_router(token_router)
@@ -17,9 +19,11 @@ app.include_router(user_router)
 app.include_router(problem_router)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+_logger = logging.getLogger("uvicorn.error")
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("shared/_layout.html", {"request": request})
+    return templates.TemplateResponse("shared/index.html", {"request": request})
 
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_root(request: Request, token: str = Depends(oauth2_scheme)):

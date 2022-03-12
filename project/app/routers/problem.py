@@ -1,10 +1,15 @@
 from ..dependencies import get_db
 from ..util import crud
-from ..schemas.problem import Problem, ProblemCreate
+from ..schemas.problem import Problem
+from ..components.problems import problem_create_view, problem_list_view, problem_detail_view
 
-from fastapi import Depends, APIRouter, HTTPException, Response, status
+from fastapi import Depends, APIRouter, Form, Request, Response, status, HTTPException
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 from typing import List
+import logging
+
+_logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(
     prefix="/problems",
@@ -13,15 +18,47 @@ router = APIRouter(
 
 @router.get("/", response_model=List[Problem])
 def read_problems(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_problems(db, skip=skip, limit=limit)
+    # sourcery skip: move-assign-in-block, use-join
+    content = ""
+    for problem in crud.get_problems(db, skip=skip, limit=limit):
+        content += problem_list_view(problem.title, problem.description, problem.id)
+    return HTMLResponse(content=content)
 
-@router.post("/", response_model=Problem)
-def create_problem(problem: ProblemCreate, db: Session = Depends(get_db)):
-    if crud.get_problem_by_title(db=db, title=problem.title):
+@router.get("/create")
+def problem_create_page():
+    return HTMLResponse(content=problem_create_view())
+
+@router.post("/", response_model=List[Problem])
+def create_problem(
+    db: Session = Depends(get_db),
+    title: str = Form(...),
+    description: str = Form(...),
+):
+    if crud.get_problem_by_title(db=db, title=title):
         raise HTTPException(400, "Problem with this title already exists!")
-    return crud.create_problem(db=db, problem=problem)
+    crud.create_problem(db=db, title=title, description=description)
+    return RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 
-@router.delete("/{problem_id}")
+@router.post("/{problem_id}/solve", response_model=Problem)
+def solve_problem(
+    problem_id: int,
+    db: Session = Depends(get_db),
+    problem_input: str = Form(...),
+):
+    _logger.debug(problem_input)
+    db_problem = crud.get_problem(db=db, problem_id=problem_id)
+    db_problem.input = problem_input
+    _logger.debug(db_problem)
+    return db_problem
+
+
+@router.get("/{problem_id}")
+def problem_detail(problem_id: int, db: Session = Depends(get_db)):
+    db_problem = crud.get_problem(db, problem_id)
+    return HTMLResponse(content=problem_detail_view(db_problem))
+
+@router.get("/{problem_id}/delete")
 def delete_problem(problem_id: int, db: Session = Depends(get_db)):
     crud.delete_problem(db=db, problem_id=problem_id)
-    return Response(content="Deleted problem", status_code=status.HTTP_204_NO_CONTENT)
+    url = router.url_path_for("read_problems")
+    return RedirectResponse(url=url)

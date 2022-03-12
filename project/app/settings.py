@@ -7,8 +7,8 @@ import jinja_partials
 BASE_DIR = Path(__file__).resolve().parent
 
 ### Templates ###
-TEMPLATES_DIR = str(Path(BASE_DIR, 'templates'))
-templates = Jinja2Templates(directory=TEMPLATES_DIR)
+TEMPLATES_DIR = Path(BASE_DIR, 'templates')
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 jinja_partials.register_starlette_extensions(templates)
 
 ### Security ###

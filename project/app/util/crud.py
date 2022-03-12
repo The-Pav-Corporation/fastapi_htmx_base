@@ -4,7 +4,7 @@ from .. schemas import item as item_schema, user as user_schema, problem as prob
 
 import logging
 
-_logger = logging.getLogger(__name__)
+_logger = logging.getLogger("uvicorn.error")
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -16,7 +16,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: user_schema.UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
+    fake_hashed_password = f'{user.password}notreallyhashed'
     db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
     db.add(db_user)
     db.commit()
@@ -43,11 +43,12 @@ def get_problem(db: Session, problem_id: int):
 def get_problem_by_title(db: Session, title: str):
     return db.query(models.Problem).filter(models.Problem.title == title).first()
 
-def create_problem(db: Session, problem: problem_schema.ProblemCreate):
-    db_problem = models.Problem(**problem.dict())
+def create_problem(db: Session, title, description):
+    db_problem = models.Problem(title=title, description=description)
     db.add(db_problem)
     db.commit()
     db.refresh(db_problem)
+    _logger.debug(db_problem)
     return db_problem
 
 def delete_problem(db: Session, problem_id: int):
