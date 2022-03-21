@@ -43,23 +43,27 @@ def problem_create_view():
     """
 
 def problem_detail_view(problem: Problem):
-    solved = "Solved" if problem.is_solved else "Not Solved"
-    solution = '<p id="solution">Solution: {problem.solution}</p>' if problem.solution else ''
+    solved = '<p id="solved">Verified</p>' if problem.is_solved else '<p id="solved">Unverified</p>'
     return f"""
     <h2>{problem.title}</h2>
     <div class="container">
         <p>{problem.description}</p>
-        <p>{solved}</p>
-        <form action="/problems/{problem.id}/solve" method="POST">
+        <form hx-post="/problems/{problem.id}/solve" hx-target="#solution">
             <div class="mb-3 row col-sm-5">
                 <label for="problem_input" class="col-sm-1 col-form-label">Input</label>
                 <div class="col-sm-11">
                     <input type="text" name="problem_input" class="form-control col-sm-4" id="problem_input" placeholder="Dataset">
                 </div>
             </div>
-        <input type="submit" value="Get Solution" class="btn btn-primary mb-3">
+            <input type="submit" value="Get Solution" class="btn btn-primary mb-3">
         </form>
-        {solution}
+        <p id="solution">No solution yet</p>
+        {solved}
+        <a href="#problems/"
+            hx-get="/problems/{problem.id}/mark_solved"
+            hx-trigger="click"
+            hx-target="#solved"
+            class="btn btn-primary">Change is solved</a> 
         <a href="#problems/"
             hx-get="/problems/{problem.id}/delete"
             hx-trigger="click"
