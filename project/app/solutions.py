@@ -3,7 +3,7 @@ solutions = {}
 
 ### Solutions: remember to register solutions at the bottom ###
 ### Test Solution ###
-test_solution_title = "test"
+test_solution_title = "Test".lower()
 def test_solution_func(input: str):
     return f"Here's your input: {input}"
 

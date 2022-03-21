@@ -61,14 +61,6 @@ def problem_solve(
     solution = solutions.get(db_problem.title.lower())
     output = solution(problem_input) if solution else "No solution found!"
     return HTMLResponse(content=output)
-
-# @router.get("/{problem_id}/mark_solved")
-# def problem_mark_solved(problem_id: int, db: Session = Depends(get_db)):
-#     db_problem = crud.get_problem(db, problem_id)
-#     if not db_problem.is_solved:
-#         db_problem.is_solved = True
-#         db.commit()
-#     return HTMLResponse(content="Verified")
     
 @router.get("/{problem_id}/mark_solved")
 def problem_mark_solved(problem_id: int, db: Session = Depends(get_db)):
