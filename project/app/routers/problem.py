@@ -22,7 +22,7 @@ def read_problems(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     # sourcery skip: move-assign-in-block, use-join
     content = ""
     for problem in crud.get_problems(db, skip=skip, limit=limit):
-        content += problem_list_view(problem.title, problem.description, problem.id)
+        content += problem_list_view(problem.title, problem.description, problem.id, problem.is_solved)
     return HTMLResponse(content=content)
 
 @router.get("/create")

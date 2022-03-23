@@ -1,12 +1,13 @@
 from ..schemas.problem import Problem 
 
-def problem_list_view(title: str, description: str, id: int):
+def problem_list_view(title: str, description: str, id: int, is_solved: bool):
+    solved = '<p id="solved">Verified</p>' if is_solved else '<p id="solved">Unverified</p>'
     return f"""
         <div class="card" style="width: 18rem; margin: 10px;">
             <div class="card-body">
                 <h5 class="card-title">{title}</h5>
                 <div style="max-height: 9rem; overflow: hidden; white-space: no-wrap; margin-bottom: 5px;">
-                    <p class="card-text">{description}</p>
+                    <p class="card-text" style="white-space: pre-wrap">{description}</p>
                 </div>
                 <a href="#problems/{id}"
                     hx-get="/problems/{id}"
@@ -19,6 +20,7 @@ def problem_list_view(title: str, description: str, id: int):
                     hx-target="#content"
                     class="btn btn-danger">Delete</a> 
                     </div>
+                {solved}
         </div>
         """
 
@@ -47,7 +49,7 @@ def problem_detail_view(problem: Problem):
     return f"""
     <h2>{problem.title}</h2>
     <div class="container">
-        <p>{problem.description}</p>
+        <p style="white-space: pre-wrap">{problem.description}</p>
         <form hx-post="/problems/{problem.id}/solve" hx-target="#solution">
             <div class="mb-3 row col-sm-5">
                 <label for="problem_input" class="col-sm-1 col-form-label">Input</label>
