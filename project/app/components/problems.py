@@ -1,7 +1,16 @@
 from ..schemas.problem import Problem 
 
 def problem_list_view(title: str, description: str, id: int, is_solved: bool):
-    solved = '<p id="solved">Verified</p>' if is_solved else '<p id="solved">Unverified</p>'
+    solved_color = "green" if is_solved else "red"
+    solved = f"""
+    <div id="solved"
+        style="
+            height: 20px;
+            width: 20px;
+            border-radius: 10px;
+            background-color: {solved_color};
+            margin: 10px;">
+            </div>"""
     return f"""
         <div class="card" style="width: 18rem; margin: 10px;">
             <div class="card-body">
@@ -18,9 +27,9 @@ def problem_list_view(title: str, description: str, id: int, is_solved: bool):
                     hx-get="/problems/{id}/delete"
                     hx-trigger="click"
                     hx-target="#content"
-                    class="btn btn-danger">Delete</a> 
-                    </div>
+                    class="btn btn-danger">Delete</a>
                 {solved}
+            </div>
         </div>
         """
 
@@ -45,7 +54,16 @@ def problem_create_view():
     """
 
 def problem_detail_view(problem: Problem):
-    solved = '<p id="solved">Verified</p>' if problem.is_solved else '<p id="solved">Unverified</p>'
+    solved_color = "green" if problem.is_solved else "red"
+    solved = f"""
+    <div id="solved"
+        style="
+            height: 20px;
+            width: 20px;
+            border-radius: 10px;
+            background-color: {solved_color};
+            margin: 10px;">
+            </div>"""
     return f"""
     <h2>{problem.title}</h2>
     <div class="container">
@@ -65,7 +83,8 @@ def problem_detail_view(problem: Problem):
             hx-get="/problems/{problem.id}/mark_solved"
             hx-trigger="click"
             hx-target="#solved"
-            class="btn btn-primary">Change is solved</a> 
+            hx-swap="outerHTML"
+            class="btn btn-success">Change is solved</a> 
         <a href="#problems/"
             hx-get="/problems/{problem.id}/delete"
             hx-trigger="click"

@@ -1,5 +1,8 @@
 import logging
-from Bio.Seq import Seq
+from Bio.Seq import Seq, translate
+from Bio.SeqUtils import GC
+from typing import Generator
+from itertools import zip_longest
 
 _logger = logging.getLogger("uvicorn.error")
 
@@ -26,7 +29,133 @@ complementing_dna_title = "Complementing a Strand of DNA".lower()
 def complement_dna(dna: str):
     sequence = Seq(dna)
     return str(sequence.reverse_complement())
-    
+
+### Rabbits and Recurrence Relations ###
+def fib(k: int) -> Generator[int, None, None]:
+    x, y = 0, 1
+    yield x
+
+    while True:
+        yield y
+        x, y = y * k, x + y
+
+rabbits_and_recurrence_title = "Rabbits and Recurrence Relations".lower()
+def rabbits_fib(input: str):
+    input_vals = [int(x) for x in input.split(" ")]
+    generations = input_vals[0]
+    litter = input_vals[1]
+    gen = fib(litter)
+    answer = 0
+    for _ in range(generations + 1):
+        answer = next(gen)
+    return f'{answer}'
+
+### Computing GC Content ###
+# See from Bio.SeqIO.FastaIO import SimpleFastaParser to make it faster
+def parse_fasta_string(input: str):
+    phrase = input.split(" ")
+    records = {}
+    for word in phrase:
+        if word[0] == ">":
+            title = word[1:]
+            part = ""
+        else:
+            part += word
+            records[title] = "".join(part)
+    return records
+
+gc_content_title = "Computing GC Content".lower()
+def gc_content(input: str):
+    records = parse_fasta_string(input)
+    max_gc = 0.0
+    max_gc_holder = ""
+    for record in records:
+        item_gc = GC(records[record])
+        if item_gc > max_gc:
+            max_gc, max_gc_holder = item_gc, record
+    return f"{max_gc_holder} - {max_gc:.6f}"
+
+### Counting Point Mutations ###
+counting_point_mutations_title = "Counting Point Mutations".lower()
+def point_mutations(input: str):
+    dna_list = list(input.split(" "))
+    return str(sum(n1 != n2 for n1, n2 in zip_longest(dna_list[0], dna_list[1])))
+
+### Mendel's First Law ###
+mendels_first_law = "Mendel's First Law".lower()
+def pr_dom(input: str):
+    """Three positive integers k, m, and n, representing a population containing
+    k+m+n organisms: k individuals are homozygous dominant for a factor,
+    m are heterozygous, and n are homozygous recessive."""
+    input_list = list(input.split(" "))
+    k, m, n = int(input_list[0]), int(input_list[1]), int(input_list[2])
+    total = k + m + n
+    pr_mate = sum([
+        (k/total) * ((k-1)/(total-1)),  # kk
+        (k/total) * (m/(total-1)),  # km
+        (k/total) * (n/(total-1)),  # kn
+        (m/total) * (k/(total-1)),  # mk
+        ((m/total) * ((m-1)/(total-1))) * 3/4,  # mm
+        ((m/total) * (n/(total-1))) * 1/2,  # mn
+        (n/total) * (k/(total-1)),  # nk
+        ((n/total) * (m/(total-1))) * 1/2,  # nm
+        ((n/total) * ((n-1)/(total-1))) * 0,  # nn
+    ])
+    return f"{pr_mate:.5f}"
+
+### Translating RNA into Protein ###
+translating_rna_title = "Translating RNA into Protein".lower()
+def translating_rna(input: str):
+    return f"{translate(input).strip('*')}"
+
+### Finding a Motif in DNA ###
+motifs_title = "Finding a Motif in DNA".lower()
+def get_motifs(input: str):
+    input_list = list(input.split(" "))
+    dna = input_list[0]
+    motif = input_list[1]
+    positions = [
+        str(position)
+        for position, n in enumerate(range(len(dna) - len(motif)), start=1)
+        if dna[n : n + len(motif)] == motif
+    ]
+
+    return f"{' '.join(positions)}"
+
+### Consensus and Profile ###
+consensus_profile_title = "Consensus and Profile".lower()
+def consensus_profile(input: str):
+    recs = parse_fasta_string(input)
+    records = list(recs.values())
+    profile = {"A": [], "C": [], "G": [], "T": []}
+    verticals = {
+        i: [record[i] for record in records]
+        for i in range(len(records[0]))
+    }
+    for v in verticals.values():
+        profile['A'].append(v.count('A'))
+        profile['C'].append(v.count('C'))
+        profile['G'].append(v.count('G'))
+        profile['T'].append(v.count('T'))
+
+    consensus = ""
+    for i in range(len(profile["A"])):
+        max_score = max(profile["A"][i], profile["C"][i], profile["G"][i], profile["T"][i])
+        for n in "ACGT":
+            if profile[n][i] == max_score:
+                consensus += n
+                break
+
+    profile_str = {"A": [], "C": [], "G": [], "T": []}
+    for symbol, value in profile.items():
+        for score in value:
+            profile_str[symbol] += str(score)
+    profile_format = f"""A: {' '.join(profile_str['A'])}
+    C: {' '.join(profile_str['C'])}
+    G: {' '.join(profile_str['G'])}
+    T: {' '.join(profile_str['T'])}
+    """
+    return f"""{consensus}\n{profile_format}"""
 
 ### Add solutions to dict ###
 solutions = {
@@ -34,4 +163,11 @@ solutions = {
     counting_dna_title: counting_dna,
     transcribing_dna_title: transcribe,
     complementing_dna_title: complement_dna,
+    rabbits_and_recurrence_title: rabbits_fib,
+    gc_content_title: gc_content,
+    counting_point_mutations_title: point_mutations,
+    mendels_first_law: pr_dom,
+    translating_rna_title: translating_rna,
+    motifs_title: get_motifs,
+    consensus_profile_title: consensus_profile,
 }

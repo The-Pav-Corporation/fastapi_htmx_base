@@ -60,17 +60,25 @@ def problem_solve(
     db_problem = crud.get_problem(db, problem_id)
     solution = solutions.get(db_problem.title.lower())
     output = solution(problem_input) if solution else "No solution found!"
-    return HTMLResponse(content=output)
+    return HTMLResponse(content=output.replace("\n", "<br/>"))
     
 @router.get("/{problem_id}/mark_solved")
 def problem_mark_solved(problem_id: int, db: Session = Depends(get_db)):
     db_problem = crud.get_problem(db, problem_id)
-    content = ""
     if db_problem.is_solved:
         db_problem.is_solved = False
-        content = "Unverified"
+        solved_color = "red"
     else:
         db_problem.is_solved = True
-        content = "Verified"
+        solved_color = "green"
+    solved = f"""
+    <div id="solved"
+        style="
+            height: 20px;
+            width: 20px;
+            border-radius: 10px;
+            background-color: {solved_color};
+            margin: 10px;">
+            </div>"""
     db.commit()
-    return HTMLResponse(content=content)
+    return HTMLResponse(content=solved)
