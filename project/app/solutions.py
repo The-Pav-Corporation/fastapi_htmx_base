@@ -39,6 +39,14 @@ def fib(k: int) -> Generator[int, None, None]:
         yield y
         x, y = y * k, x + y
 
+def mortal_fib(m: int):
+    ages = [1] + [0] * (m-1)
+
+    while True:
+        yield sum(ages)
+        ages = [sum(ages[1:])] + ages[:-1]
+
+
 rabbits_and_recurrence_title = "Rabbits and Recurrence Relations".lower()
 def rabbits_fib(input: str):
     input_vals = [int(x) for x in input.split(" ")]
@@ -47,6 +55,17 @@ def rabbits_fib(input: str):
     gen = fib(litter)
     answer = 0
     for _ in range(generations + 1):
+        answer = next(gen)
+    return f'{answer}'
+
+mortal_rabbits_title = "Mortal Fibonacci Rabbits".lower()
+def mortal_rabbits_fib(input: str):
+    input_vals = [int(x) for x in input.split(" ")]
+    generations = input_vals[0]
+    lifespan = input_vals[1]
+    gen = mortal_fib(lifespan)
+    answer = 0
+    for _ in range(generations):
         answer = next(gen)
     return f'{answer}'
 
@@ -170,4 +189,5 @@ solutions = {
     translating_rna_title: translating_rna,
     motifs_title: get_motifs,
     consensus_profile_title: consensus_profile,
+    mortal_rabbits_title: mortal_rabbits_fib,
 }
