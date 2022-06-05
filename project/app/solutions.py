@@ -1,8 +1,14 @@
 import logging
 from Bio.Seq import Seq, translate
 from Bio.SeqUtils import GC
-from typing import Generator
+from collections import defaultdict
 from itertools import zip_longest
+from itertools import product
+from pprint import pformat
+
+from .helpers.fib import fib, mortal_fib
+from .helpers.fasta import parse_fasta_string
+from .helpers.kmers import find_kmers
 
 _logger = logging.getLogger("uvicorn.error")
 
@@ -31,22 +37,6 @@ def complement_dna(dna: str):
     return str(sequence.reverse_complement())
 
 ### Rabbits and Recurrence Relations ###
-def fib(k: int) -> Generator[int, None, None]:
-    x, y = 0, 1
-    yield x
-
-    while True:
-        yield y
-        x, y = y * k, x + y
-
-def mortal_fib(m: int):
-    ages = [1] + [0] * (m-1)
-
-    while True:
-        yield sum(ages)
-        ages = [sum(ages[1:])] + ages[:-1]
-
-
 rabbits_and_recurrence_title = "Rabbits and Recurrence Relations".lower()
 def rabbits_fib(input: str):
     input_vals = [int(x) for x in input.split(" ")]
@@ -70,19 +60,6 @@ def mortal_rabbits_fib(input: str):
     return f'{answer}'
 
 ### Computing GC Content ###
-# See from Bio.SeqIO.FastaIO import SimpleFastaParser to make it faster
-def parse_fasta_string(input: str):
-    phrase = input.split(" ")
-    records = {}
-    for word in phrase:
-        if word[0] == ">":
-            title = word[1:]
-            part = ""
-        else:
-            part += word
-            records[title] = "".join(part)
-    return records
-
 gc_content_title = "Computing GC Content".lower()
 def gc_content(input: str):
     records = parse_fasta_string(input)
@@ -176,6 +153,28 @@ def consensus_profile(input: str):
     """
     return f"""{consensus}\n{profile_format}"""
 
+# Overlap Graphs
+overlap_graphs_title = "Overlap Graphs".lower()
+def overlap_graphs(input: str):
+    k = 3
+    recs = parse_fasta_string(input)
+
+    # get start and end kmers and list of records for them
+    start, end = defaultdict(list), defaultdict(list)
+    for key, rec in recs.items():
+        if kmers := find_kmers(rec, k):
+            start[kmers[0]].append(key)
+            end[kmers[-1]].append(key)
+
+    # for each common kmer in start and finish, exclude same record
+    output = ""
+    for kmer in set(start).intersection(set(end)):
+        for pair in product(end[kmer], start[kmer]):
+            if pair[0] != pair[1]:
+                output += " ".join(pair) + "\n"
+    return output
+    
+
 ### Add solutions to dict ###
 solutions = {
     test_solution_title: test_solution_func,
@@ -190,4 +189,5 @@ solutions = {
     motifs_title: get_motifs,
     consensus_profile_title: consensus_profile,
     mortal_rabbits_title: mortal_rabbits_fib,
+    overlap_graphs_title: overlap_graphs,
 }
