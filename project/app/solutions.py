@@ -8,7 +8,7 @@ from pprint import pformat
 
 from .helpers.fib import fib, mortal_fib
 from .helpers.fasta import parse_fasta_string
-from .helpers.kmers import find_kmers
+from .helpers.kmers import get_kmers
 
 _logger = logging.getLogger("uvicorn.error")
 
@@ -162,7 +162,7 @@ def overlap_graphs(input: str):
     # get start and end kmers and list of records for them
     start, end = defaultdict(list), defaultdict(list)
     for key, rec in recs.items():
-        if kmers := find_kmers(rec, k):
+        if kmers := get_kmers(rec, k):
             start[kmers[0]].append(key)
             end[kmers[-1]].append(key)
 
