@@ -1,0 +1,22 @@
+<form action="/problems/" method="POST">
+    <div class="mb-3 row">
+        <label for="problem_title" class="col-sm-1 col-form-label">Title</label>
+        <div class="col-sm-11">
+            <input type="text" name="title" class="form-control" id="problem_title" placeholder="The title of the problem">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="problem_external_url" class="col-sm-1 col-form-label">External URL</label>
+        <div class="col-sm-11">
+            <input type="text" name="external_url" class="form-control" id="problem_external_url" placeholder="External URL">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="problem_description" class="col-sm-1 col-form-label">Description</label>
+        <div class="col-sm-11">
+            <textarea name="description" id="problem_description" cols="137" rows="10"></textarea>
+            <!-- <input type="text" class="form-control" id="problem_description" placeholder="The description of the problem"> -->
+        </div>
+    </div>
+    <input type="submit" value="Create" class="btn btn-primary mb-3">
+</form>

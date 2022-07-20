@@ -1,0 +1,25 @@
+<!-- <form action="/problems/{{problem.id}}" method="POST"> -->
+<form hx-post="/problems/{{problem.id}}" hx-swap="outerHTML">
+    <div class="mb-3 row">
+        <label for="problem_title" class="col-sm-1 col-form-label">Title</label>
+        <div class="col-sm-11">
+            <textarea type="text" name="title"id="problem_title" cols="137" rows="1"
+            >{{ problem.title }}</textarea>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="problem_external_url" class="col-sm-1 col-form-label">External URL</label>
+        <div class="col-sm-11">
+            <textarea type="text" name="external_url" id="problem_external_url" cols="137" rows="1"
+            >{{ problem.external_url }}</textarea>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="problem_description" class="col-sm-1 col-form-label">Description</label>
+        <div class="col-sm-11">
+            <textarea name="description" id="problem_description" cols="137" rows="10"
+            >{{ problem.description }}</textarea>
+        </div>
+    </div>
+    <input type="submit" value="Save" class="btn btn-primary mb-3">
+</form>

@@ -11,6 +11,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 psycopg2 = "*"
 jinja-partials = "*"
 sqlalchemy = "*"
+biopython = "*"
 
 [dev-packages]
 
