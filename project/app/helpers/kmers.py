@@ -48,15 +48,14 @@ def common_kmer(seqs: List[str]) -> str:
     start = binary_search(common, 1, shortest_len)
     _logger.debug(f"start - {start}")
 
-    if start >= 0:
-        # Hill climb to find max
-        candidates = []
-        for k in range(start, shortest_len+1):
-            if kmers := common(k):
-                candidates.append(kmers[0])
-                _logger.debug(f"{k} - {candidates}")
-            else:
-                break
-        return f"{max(candidates, key=len)}"
-    else:
+    if start < 0:
         return "No common sequence"
+    # Hill climb to find max
+    candidates = []
+    for k in range(start, shortest_len+1):
+        if kmers := common(k):
+            candidates.append(kmers[0])
+            _logger.debug(f"{k} - {candidates}")
+        else:
+            break
+    return f"{max(candidates, key=len)}"

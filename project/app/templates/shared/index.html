@@ -14,7 +14,7 @@
     <nav class="nav">
         <a class="nav-link"
             id="problems_list"
-            href="#problems"
+            href="problems"
             hx-get="/problems/"
             hx-trigger="click"
             hx-target="#content">
@@ -30,7 +30,11 @@
         </a>
       </nav>
       <div class="container-fluid">
-        <div id="content" class="container-fluid row" hx-get="/problems/" hx-trigger="load"></div>
+        <div id="content"
+            class="container-fluid row"
+            hx-get="/problems/"
+            hx-trigger="load">
+        </div>
       </div>
 </body>
 </html>

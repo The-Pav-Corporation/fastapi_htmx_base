@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% for problem in problems %}
+<div class="card" style="width: 18rem; margin: 10px;">
+    <div class="card-body">
+        <h5 class="card-title">{{ problem.title }}</h5>
+        <div style="max-height: 9rem; overflow: hidden; white-space: no-wrap; margin-bottom: 5px;">
+            <p class="card-text" style="white-space: pre-wrap">{{ problem.description }}</p>
+        </div>
+        <a href="problems/{{ problem.id }}"
+            hx-get="/problems/{{ problem.id }}"
+            hx-trigger="click"
+            hx-target="#content"
+            class="btn btn-primary">Details</a>
+        <a href="problems/"
+            hx-get="/problems/{{ problem.id }}/delete"
+            hx-trigger="click"
+            hx-target="#content"
+            class="btn btn-danger">Delete</a>
+        <div id="solved"/>{{ "Solved" if problem.is_solved else "Not solved"}}</div>
+    </div>
+</div>
+{% endfor %}

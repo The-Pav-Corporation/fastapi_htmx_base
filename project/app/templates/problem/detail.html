@@ -1,0 +1,32 @@
+<h2>{{ problem.title }}</h2>
+    <div class="container">
+        <p style="white-space: pre-wrap"><a href="{{ problem.external_url }}">External URL</a></p>
+        <p style="white-space: pre-wrap">{{ problem.description }}</p>
+        <form hx-post="/problems/{{problem.id}}/solve" hx-target="#solution">
+            <div class="mb-3 row col-sm-5">
+                <label for="problem_input" class="col-sm-1 col-form-label">Input</label>
+                <div class="col-sm-11">
+                    <input type="text" name="problem_input" class="form-control col-sm-4" id="problem_input" placeholder="Dataset">
+                </div>
+            </div>
+            <input type="submit" value="Get Solution" class="btn btn-primary mb-3">
+        </form>
+        <p id="solution">No solution yet</p>
+        <div id="solved"/>{{ "Solved" if problem.is_solved else "Not solved"}}</div>
+        <a href="problems/"
+            hx-get="/problems/{{problem.id}}/mark_solved"
+            hx-trigger="click"
+            hx-target="#solved"
+            hx-swap="innerHTML"
+            class="btn btn-success">Change is solved</a> 
+            <a href="problems/"
+            hx-get="/problems/{{problem.id}}/edit"
+            hx-trigger="click"
+            hx-target="#content"
+            class="btn btn-primary">Edit</a>  
+        <a href="problems/"
+            hx-get="/problems/{{problem.id}}/delete"
+            hx-trigger="click"
+            hx-target="#content"
+            class="btn btn-danger">Delete</a> 
+    </div>

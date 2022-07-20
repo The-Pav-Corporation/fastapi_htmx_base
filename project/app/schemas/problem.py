@@ -16,6 +16,7 @@ class Problem(ProblemBase):
     input: str = None
     solution: str = None
     is_solved: bool = False
+    external_url: str = None
 
     class Config:
         orm_mode = True
