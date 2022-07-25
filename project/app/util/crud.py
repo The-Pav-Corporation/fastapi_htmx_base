@@ -17,8 +17,13 @@ def get_problem(db: Session, problem_id: int):
 def get_problem_by_title(db: Session, title: str):
     return db.query(models.Problem).filter(models.Problem.title == title).first()
 
-def create_problem(db: Session, title, description, external_url):
-    db_problem = models.Problem(title=title, description=description, external_url=external_url)
+def create_problem(db: Session, title, description, external_url, source):
+    db_problem = models.Problem(
+        title=title,
+        description=description,
+        external_url=external_url,
+        source=source
+    )
     db.add(db_problem)
     db.commit()
     db.refresh(db_problem)

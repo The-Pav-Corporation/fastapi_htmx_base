@@ -7,9 +7,8 @@ from ..settings import templates
 from fastapi import Depends, APIRouter, Form, Request, Response, status, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Union
 import logging
-from html.parser import HTMLParser
 
 _logger = logging.getLogger("uvicorn.error")
 
@@ -32,8 +31,8 @@ def create_problem(
     db: Session = Depends(get_db),
     title: str = Form(...),
     description: str = Form(...),
-    external_url: str = Form(...),
     source: str = Form(...),
+    external_url: str = Form(""),
 ):
     if crud.get_problem_by_title(db=db, title=title):
         raise HTTPException(400, "Problem with this title already exists!")

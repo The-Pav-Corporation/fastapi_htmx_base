@@ -7,7 +7,7 @@ from itertools import chain
 
 _logger = logging.getLogger("uvicorn.error")
 
-def binary_search(f: Callable, low: int, high: int):
+def binary_search(f: Callable, low: int, high: int) -> int:
     """Binary search"""
 
     hi, lo = f(high), f(low)
@@ -25,13 +25,13 @@ def binary_search(f: Callable, low: int, high: int):
     return -1
 
 def get_kmers(seq: str, k: int) -> List[str]:
-    """Get all k-mers in string"""
+    """Get all k-mers in string seq"""
 
     n = len(seq) - k + 1
     return [] if n < 1 else [seq[i:i+k] for i in range(n)]
 
-def common_kmers(seqs: List[str], k: int):
-    """Get all k-mers common to all sequences"""
+def common_kmers(seqs: List[str], k: int) -> List[str]:
+    """Get all k-mers common to all sequences seqs"""
     kmers = [set(get_kmers(seq, k)) for seq in seqs]
     counts = Counter(chain.from_iterable(kmers))
     n = len(seqs)
@@ -44,9 +44,7 @@ def common_kmer(seqs: List[str]) -> str:
 
     # find starting point
     common = partial(common_kmers, seqs)
-    _logger.debug(common)
     start = binary_search(common, 1, shortest_len)
-    _logger.debug(f"start - {start}")
 
     if start < 0:
         return "No common sequence"

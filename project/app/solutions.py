@@ -4,7 +4,6 @@ from Bio.SeqUtils import GC
 from collections import defaultdict
 from itertools import zip_longest
 from itertools import product
-from pprint import pformat
 
 from .helpers.fib import fib, mortal_fib
 from .helpers.fasta import parse_fasta_string
