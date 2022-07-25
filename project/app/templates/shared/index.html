@@ -18,7 +18,23 @@
             hx-get="/problems/"
             hx-trigger="click"
             hx-target="#content">
-            Problems
+            All Problems
+        </a>
+        <a class="nav-link"
+            id="problems_list"
+            href="problems"
+            hx-get="/problems/?source=Rosalind"
+            hx-trigger="click"
+            hx-target="#content">
+            Rosalind
+        </a>
+        <a class="nav-link"
+            id="problems_list"
+            href="problems"
+            hx-get="/problems/?source=Stepik"
+            hx-trigger="click"
+            hx-target="#content">
+            Stepik
         </a>
         <a class="nav-link"
             id="problems_create"

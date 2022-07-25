@@ -19,8 +19,8 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[Problem])
-def read_problems(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    problems = crud.get_problems(db, skip, limit)
+def read_problems(request: Request, source: str = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    problems = crud.get_problems(db, skip, limit, source)
     return templates.TemplateResponse("problem/list.html", {"request": request, "problems": problems})
 
 @router.get("/create")
@@ -33,10 +33,17 @@ def create_problem(
     title: str = Form(...),
     description: str = Form(...),
     external_url: str = Form(...),
+    source: str = Form(...),
 ):
     if crud.get_problem_by_title(db=db, title=title):
         raise HTTPException(400, "Problem with this title already exists!")
-    crud.create_problem(db=db, title=title, description=description, external_url=external_url)
+    crud.create_problem(
+        db=db,
+        title=title,
+        description=description,
+        external_url=external_url,
+        source=source
+    )
     return RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 
 @router.get("/{problem_id}")
@@ -57,8 +64,9 @@ def problem_put(
     title: str = Form(...),
     description: str = Form(...),
     external_url: str = Form(...),
+    source: str = Form(...),
 ):
-    problem = crud.edit_problem(db, problem_id, title, description, external_url)
+    problem = crud.edit_problem(db, problem_id, title, description, external_url, source)
     return templates.TemplateResponse("problem/detail.html", {"request": request, "problem": problem})
 
 

@@ -14,6 +14,7 @@ class ProblemCreate(ProblemBase):
 class Problem(ProblemBase):
     id: int
     input: str = None
+    source: str = None
     solution: str = None
     is_solved: bool = False
     external_url: str = None
