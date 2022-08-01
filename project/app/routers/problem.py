@@ -62,7 +62,7 @@ def problem_put(
     db: Session = Depends(get_db),
     title: str = Form(...),
     description: str = Form(...),
-    external_url: str = Form(...),
+    external_url: str = Form(""),
     source: str = Form(...),
 ):
     problem = crud.edit_problem(db, problem_id, title, description, external_url, source)
