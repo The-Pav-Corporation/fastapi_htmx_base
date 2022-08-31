@@ -25,8 +25,10 @@ def binary_search(f: Callable, low: int, high: int) -> int:
     return -1
 
 def get_kmers(seq: str, k: int) -> List[str]:
+    # sourcery skip: remove-unnecessary-cast
     """Get all k-mers in string seq"""
-
+    if not isinstance(k, int):
+        k = int(k)
     n = len(seq) - k + 1
     return [] if n < 1 else [seq[i:i+k] for i in range(n)]
 

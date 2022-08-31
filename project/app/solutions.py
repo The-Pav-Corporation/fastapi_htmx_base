@@ -1,7 +1,7 @@
 import logging
 from Bio.Seq import Seq, translate
 from Bio.SeqUtils import GC
-from collections import defaultdict
+from collections import defaultdict, Counter
 from itertools import zip_longest
 from itertools import product
 
@@ -172,10 +172,43 @@ def overlap_graphs(input: str):
             if pair[0] != pair[1]:
                 output += " ".join(pair) + "\n"
     return output
-    
+
+# Stepik problems
+frequent_words_title = "Frequent Words Problem".lower()
+def frequent_words(input: str):
+    dna = input.split(" ")[0]
+    k = input.split(" ")[1]
+    kmers = get_kmers(dna, k)
+    kmers_counts = Counter(kmers)
+    most_common = kmers_counts.most_common(1)[0][0]
+    return f"{most_common}"
+
+pattern_matching_title = "Pattern Matching Problem".lower()
+def pattern_matching(input: str):
+    pattern = input.split(" ")[0].lower()
+    genome = input.split(" ")[1].lower()
+    limit = len(genome)-len(pattern)+1
+    indexes = [str(i) for i in range(limit) if pattern == genome[i:i+len(pattern)]]
+    return f"{', '.join(indexes) or 'Pattern not found.'}"
+
+clump_finding_title = "Clump Finding Problem".lower()
+def clump_finding(input: str):
+    genome = input.split(" ")[0]
+    k = int(input.split(" ")[1])
+    L = int(input.split(" ")[2])
+    t = int(input.split(" ")[3])
+    clump = []
+    for i in range(len(genome)-L):
+        window = genome[i:i+L]
+        kmers = get_kmers(window, k)
+        kmers_counts = Counter(kmers)
+        clump.extend(kmer for kmer, count in dict(kmers_counts).items() if count >= t)
+    clump_set = set(clump)
+    return f"{' '.join(clump_set)}"
 
 ### Add solutions to dict ###
 solutions = {
+    # Rosalind below
     test_solution_title: test_solution_func,
     counting_dna_title: counting_dna,
     transcribing_dna_title: transcribe,
@@ -189,4 +222,8 @@ solutions = {
     consensus_profile_title: consensus_profile,
     mortal_rabbits_title: mortal_rabbits_fib,
     overlap_graphs_title: overlap_graphs,
+    # Stepik below
+    frequent_words_title: frequent_words,
+    pattern_matching_title: pattern_matching,
+    clump_finding_title: clump_finding,
 }
