@@ -1,13 +1,14 @@
 from pydantic import BaseModel, validator
-from typing import List, Optional
+from typing import Optional
 
 
 class ProblemBase(BaseModel):
     title: str
     description: Optional[str] = None
 
-    @validator('*')
-    def field_has_printable_chars(self, value):
+    @validator('*', pre=True, always=True)
+    def field_has_printable_chars(cls, value):
+        print("running wildcard validator")
         if "\x00" in value:
             raise ValueError("Field value has unprintable characters.")
 

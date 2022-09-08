@@ -29,7 +29,7 @@ def create_problem(db: Session, title, description, external_url, source):
     db.add(db_problem)
     db.commit()
     db.refresh(db_problem)
-    _logger.debug(db_problem)
+    _logger.debug(f"created: {db_problem}")
     return db_problem
 
 def delete_problem(db: Session, problem_id: int):
@@ -43,7 +43,7 @@ def edit_problem(db: Session, problem_id: int, title, description, external_url,
     db_problem.description = description
     db_problem.external_url = external_url
     db_problem.source = source
-    _logger.debug(db_problem.title)
+    _logger.debug(f"edited: {db_problem.title}")
     db.commit()
     db.refresh(db_problem)
     return db_problem
