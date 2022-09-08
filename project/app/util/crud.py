@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from .decorators.cleaners import ensure_printable
 from .. import models
 
 import logging
@@ -17,12 +18,13 @@ def get_problem(db: Session, problem_id: int):
 def get_problem_by_title(db: Session, title: str):
     return db.query(models.Problem).filter(models.Problem.title == title).first()
 
+@ensure_printable
 def create_problem(db: Session, title, description, external_url, source):
     db_problem = models.Problem(
         title=title,
         description=description,
         external_url=external_url,
-        source=source
+        source=source,
     )
     db.add(db_problem)
     db.commit()
@@ -34,6 +36,7 @@ def delete_problem(db: Session, problem_id: int):
     db.delete(get_problem(db=db, problem_id=problem_id))
     db.commit()
 
+@ensure_printable
 def edit_problem(db: Session, problem_id: int, title, description, external_url, source):
     db_problem = get_problem(db, problem_id)
     db_problem.title = title

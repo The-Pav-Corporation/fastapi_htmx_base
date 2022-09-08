@@ -32,7 +32,7 @@ def create_problem(
     title: str = Form(...),
     description: str = Form(...),
     source: str = Form(...),
-    external_url: str = Form(""),
+    external_url: str = Form("No URL"),
 ):
     if crud.get_problem_by_title(db=db, title=title):
         raise HTTPException(400, "Problem with this title already exists!")
