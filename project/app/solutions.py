@@ -8,6 +8,7 @@ from itertools import product
 from .helpers.fib import fib, mortal_fib
 from .helpers.fasta import parse_fasta_string
 from .helpers.kmers import get_kmers
+from .helpers.genome import skew
 
 _logger = logging.getLogger("uvicorn.error")
 
@@ -206,6 +207,14 @@ def clump_finding(input: str):
     clump_set = set(clump)
     return f"{' '.join(clump_set)}"
 
+minimum_skew_title = "Minimum Skew".lower()
+def minimum_skew(genome: str):
+    gen = skew(genome)
+    skew_list = [next(gen) for _ in range(len(genome))]
+    min_skew = min(skew_list)
+    min_indexes = [i for i, val in enumerate(skew_list) if val == min_skew]
+    return f"{min_indexes}"
+
 ### Add solutions to dict ###
 solutions = {
     # Rosalind below
@@ -226,4 +235,5 @@ solutions = {
     frequent_words_title: frequent_words,
     pattern_matching_title: pattern_matching,
     clump_finding_title: clump_finding,
+    minimum_skew_title: minimum_skew,
 }
