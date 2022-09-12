@@ -1,4 +1,6 @@
 import logging
+from typing import List
+
 from Bio.Seq import Seq, translate
 from Bio.SeqUtils import GC
 from collections import defaultdict, Counter
@@ -22,7 +24,7 @@ def test_solution_func(input: str):
 ### Counting DNA Nucleotides ###
 counting_dna_title = "Counting DNA Nucleotides".lower()
 def counting_dna(dna: str):
-    acgt = [str(dna.count('A')), str(dna.count('C')), str(dna.count('G')), str(dna.count('T'))]
+    acgt: list[str] = [str(dna.count('A')), str(dna.count('C')), str(dna.count('G')), str(dna.count('T'))]
     return " ".join(acgt)
 
 ### Transcribing DNA into RNA ###
@@ -215,6 +217,15 @@ def minimum_skew(genome: str):
     min_indexes = [i for i, val in enumerate(skew_list) if val == min_skew]
     return f"{min_indexes}"
 
+hamming_distance_title = "Hamming Distance".lower()
+def hamming_distance(input: str):
+    val1 = input.split(' ')[0]
+    val2 = input.split(' ')[1]
+    val_to_iterate = val1
+    if len(val_to_iterate) > len(val2):
+        val_to_iterate = val2
+    return f"{sum(letter != val2[i] for i, letter in enumerate(val_to_iterate))}"
+
 ### Add solutions to dict ###
 solutions = {
     # Rosalind below
@@ -236,4 +247,5 @@ solutions = {
     pattern_matching_title: pattern_matching,
     clump_finding_title: clump_finding,
     minimum_skew_title: minimum_skew,
+    hamming_distance_title: hamming_distance,
 }
