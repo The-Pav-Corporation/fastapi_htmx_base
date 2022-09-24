@@ -12,6 +12,7 @@ class ProblemBase(BaseModel):
         if "\x00" in value:
             raise ValueError("Field value has unprintable characters.")
 
+
 class ProblemCreate(ProblemBase):
     pass
 

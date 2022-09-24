@@ -6,12 +6,12 @@ import jinja_partials
 
 BASE_DIR = Path(__file__).resolve().parent
 
-### Templates ###
+# Templates #
 TEMPLATES_DIR = Path(BASE_DIR, 'templates')
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 jinja_partials.register_starlette_extensions(templates)
 
-### Security ###
+# Security #
 # to get a string like this run:
 # openssl rand -hex 32
 SECRET_KEY = ULTRA_SECRET_KEY

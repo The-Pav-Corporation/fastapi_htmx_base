@@ -15,6 +15,7 @@ app.include_router(problem_router)
 
 _logger = logging.getLogger("uvicorn.error")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("shared/index.html", {"request": request})

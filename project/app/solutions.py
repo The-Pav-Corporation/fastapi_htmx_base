@@ -1,5 +1,4 @@
 import logging
-from typing import List
 
 from Bio.Seq import Seq, translate
 from Bio.SeqUtils import GC
@@ -15,35 +14,35 @@ from .helpers.genome import skew
 _logger = logging.getLogger("uvicorn.error")
 
 
-### Solutions: remember to register solutions at the bottom ###
-### Test Solution ###
+# Solutions: remember to register solutions at the bottom #
+# Test Solution #
 test_solution_title = "Test".lower()
-def test_solution_func(input: str):
-    return f"Here's your input: {input}"
+def test_solution_func(str_input: str):
+    return f"Here's your str_input: {str_input}"
 
-### Counting DNA Nucleotides ###
+# Counting DNA Nucleotides #
 counting_dna_title = "Counting DNA Nucleotides".lower()
 def counting_dna(dna: str):
     acgt: list[str] = [str(dna.count('A')), str(dna.count('C')), str(dna.count('G')), str(dna.count('T'))]
     return " ".join(acgt)
 
-### Transcribing DNA into RNA ###
+# Transcribing DNA into RNA #
 transcribing_dna_title = "Transcribing DNA into RNA".lower()
 def transcribe(dna: str):
     return dna.replace('T', 'U')
 
-### Complementing a Strand of DNA ###
+# Complementing a Strand of DNA #
 complementing_dna_title = "Complementing a Strand of DNA".lower()
 def complement_dna(dna: str):
     sequence = Seq(dna)
     return str(sequence.reverse_complement())
 
-### Rabbits and Recurrence Relations ###
+# Rabbits and Recurrence Relations #
 rabbits_and_recurrence_title = "Rabbits and Recurrence Relations".lower()
-def rabbits_fib(input: str):
-    input_vals = [int(x) for x in input.split(" ")]
-    generations = input_vals[0]
-    litter = input_vals[1]
+def rabbits_fib(str_input: str):
+    str_input_vals = [int(x) for x in str_input.split(" ")]
+    generations = str_input_vals[0]
+    litter = str_input_vals[1]
     gen = fib(litter)
     answer = 0
     for _ in range(generations + 1):
@@ -51,20 +50,20 @@ def rabbits_fib(input: str):
     return f'{answer}'
 
 mortal_rabbits_title = "Mortal Fibonacci Rabbits".lower()
-def mortal_rabbits_fib(input: str):
-    input_vals = [int(x) for x in input.split(" ")]
-    generations = input_vals[0]
-    lifespan = input_vals[1]
+def mortal_rabbits_fib(str_input: str):
+    str_input_vals = [int(x) for x in str_input.split(" ")]
+    generations = str_input_vals[0]
+    lifespan = str_input_vals[1]
     gen = mortal_fib(lifespan)
     answer = 0
     for _ in range(generations):
         answer = next(gen)
     return f'{answer}'
 
-### Computing GC Content ###
+# Computing GC Content #
 gc_content_title = "Computing GC Content".lower()
-def gc_content(input: str):
-    records = parse_fasta_string(input)
+def gc_content(str_input: str):
+    records = parse_fasta_string(str_input)
     max_gc = 0.0
     max_gc_holder = ""
     for record in records:
@@ -73,20 +72,20 @@ def gc_content(input: str):
             max_gc, max_gc_holder = item_gc, record
     return f"{max_gc_holder} - {max_gc:.6f}"
 
-### Counting Point Mutations ###
+# Counting Point Mutations #
 counting_point_mutations_title = "Counting Point Mutations".lower()
-def point_mutations(input: str):
-    dna_list = list(input.split(" "))
+def point_mutations(str_input: str):
+    dna_list = list(str_input.split(" "))
     return str(sum(n1 != n2 for n1, n2 in zip_longest(dna_list[0], dna_list[1])))
 
-### Mendel's First Law ###
+# Mendel's First Law #
 mendels_first_law = "Mendel's First Law".lower()
-def pr_dom(input: str):
+def pr_dom(str_input: str):
     """Three positive integers k, m, and n, representing a population containing
     k+m+n organisms: k individuals are homozygous dominant for a factor,
     m are heterozygous, and n are homozygous recessive."""
-    input_list = list(input.split(" "))
-    k, m, n = int(input_list[0]), int(input_list[1]), int(input_list[2])
+    str_input_list = list(str_input.split(" "))
+    k, m, n = int(str_input_list[0]), int(str_input_list[1]), int(str_input_list[2])
     total = k + m + n
     pr_mate = sum([
         (k/total) * ((k-1)/(total-1)),  # kk
@@ -101,17 +100,17 @@ def pr_dom(input: str):
     ])
     return f"{pr_mate:.5f}"
 
-### Translating RNA into Protein ###
+# Translating RNA into Protein #
 translating_rna_title = "Translating RNA into Protein".lower()
-def translating_rna(input: str):
-    return f"{translate(input).strip('*')}"
+def translating_rna(str_input: str):
+    return f"{translate(str_input).strip('*')}"
 
-### Finding a Motif in DNA ###
+# Finding a Motif in DNA #
 motifs_title = "Finding a Motif in DNA".lower()
-def get_motifs(input: str):
-    input_list = list(input.split(" "))
-    dna = input_list[0]
-    motif = input_list[1]
+def get_motifs(str_input: str):
+    str_input_list = list(str_input.split(" "))
+    dna = str_input_list[0]
+    motif = str_input_list[1]
     positions = [
         str(position)
         for position, n in enumerate(range(len(dna) - len(motif)), start=1)
@@ -120,10 +119,10 @@ def get_motifs(input: str):
 
     return f"{' '.join(positions)}"
 
-### Consensus and Profile ###
+# Consensus and Profile #
 consensus_profile_title = "Consensus and Profile".lower()
-def consensus_profile(input: str):
-    recs = parse_fasta_string(input)
+def consensus_profile(str_input: str):
+    recs = parse_fasta_string(str_input)
     records = list(recs.values())
     profile = {"A": [], "C": [], "G": [], "T": []}
     verticals = {
@@ -157,9 +156,9 @@ def consensus_profile(input: str):
 
 # Overlap Graphs
 overlap_graphs_title = "Overlap Graphs".lower()
-def overlap_graphs(input: str):
+def overlap_graphs(str_input: str):
     k = 3
-    recs = parse_fasta_string(input)
+    recs = parse_fasta_string(str_input)
 
     # get start and end kmers and list of records for them
     start, end = defaultdict(list), defaultdict(list)
@@ -178,28 +177,28 @@ def overlap_graphs(input: str):
 
 # Stepik problems
 frequent_words_title = "Frequent Words Problem".lower()
-def frequent_words(input: str):
-    dna = input.split(" ")[0]
-    k = input.split(" ")[1]
-    kmers = get_kmers(dna, k)
+def frequent_words(str_input: str):
+    dna = str_input.split(" ")[0]
+    k = str_input.split(" ")[1]
+    kmers = get_kmers(dna, int(k))
     kmers_counts = Counter(kmers)
     most_common = kmers_counts.most_common(1)[0][0]
     return f"{most_common}"
 
 pattern_matching_title = "Pattern Matching Problem".lower()
-def pattern_matching(input: str):
-    pattern = input.split(" ")[0].lower()
-    genome = input.split(" ")[1].lower()
+def pattern_matching(str_input: str):
+    pattern = str_input.split(" ")[0].lower()
+    genome = str_input.split(" ")[1].lower()
     limit = len(genome)-len(pattern)+1
     indexes = [str(i) for i in range(limit) if pattern == genome[i:i+len(pattern)]]
     return f"{', '.join(indexes) or 'Pattern not found.'}"
 
 clump_finding_title = "Clump Finding Problem".lower()
-def clump_finding(input: str):
-    genome = input.split(" ")[0]
-    k = int(input.split(" ")[1])
-    L = int(input.split(" ")[2])
-    t = int(input.split(" ")[3])
+def clump_finding(str_input: str):
+    genome = str_input.split(" ")[0]
+    k = int(str_input.split(" ")[1])
+    L = int(str_input.split(" ")[2])
+    t = int(str_input.split(" ")[3])
     clump = []
     for i in range(len(genome)-L):
         window = genome[i:i+L]
@@ -218,15 +217,25 @@ def minimum_skew(genome: str):
     return f"{min_indexes}"
 
 hamming_distance_title = "Hamming Distance".lower()
-def hamming_distance(input: str):
-    val1 = input.split(' ')[0]
-    val2 = input.split(' ')[1]
+def hamming_distance(str_input: str):
+    val1 = str_input.split(' ')[0]
+    val2 = str_input.split(' ')[1]
     val_to_iterate = val1
     if len(val_to_iterate) > len(val2):
         val_to_iterate = val2
     return f"{sum(letter != val2[i] for i, letter in enumerate(val_to_iterate))}"
 
-### Add solutions to dict ###
+approximate_pattern_matching_title = "Approximate Pattern Matching".lower()
+def approximate_pattern_matching(str_input: str):
+    pattern = str_input.split(' ')[0]
+    genome = str_input.split(' ')[1]
+    limit = len(genome) - len(pattern) + 1
+    d = int(str_input.split(' ')[2])
+    indexes = [str(i) for i in range(limit) if int(hamming_distance(f"{pattern} {genome[i:i+len(pattern)]}")) <= d]
+    return f"{', '.join(indexes) or 'Pattern not found.'}"
+
+
+# Add solutions to dict #
 solutions = {
     # Rosalind below
     test_solution_title: test_solution_func,
@@ -248,4 +257,5 @@ solutions = {
     clump_finding_title: clump_finding,
     minimum_skew_title: minimum_skew,
     hamming_distance_title: hamming_distance,
+    approximate_pattern_matching_title: approximate_pattern_matching,
 }
