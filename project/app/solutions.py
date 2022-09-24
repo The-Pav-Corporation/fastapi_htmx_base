@@ -234,6 +234,19 @@ def approximate_pattern_matching(str_input: str):
     indexes = [str(i) for i in range(limit) if int(hamming_distance(f"{pattern} {genome[i:i+len(pattern)]}")) <= d]
     return f"{', '.join(indexes) or 'Pattern not found.'}"
 
+frequent_words_with_mismatches_title = "Frequent Words with Mismatches".lower()
+def frequent_words_with_mismatches(str_input: str):
+    dna = str_input.split(" ")[0]
+    k = int(str_input.split(" ")[1])
+    d = int(str_input.split(" ")[2])
+    kmers = set(get_kmers(dna, k))
+    counts = defaultdict(int)
+    for kmer in kmers:
+        for i in range(len(dna)):
+            if int(hamming_distance(f"{kmer} {dna[i:i+k]}")) <= d:
+                counts[kmer] += 1
+    max_count = max(counts.values())
+    return f"{', '.join([kmer for kmer, count in counts.items() if count == max_count])}"
 
 # Add solutions to dict #
 solutions = {
@@ -258,4 +271,5 @@ solutions = {
     minimum_skew_title: minimum_skew,
     hamming_distance_title: hamming_distance,
     approximate_pattern_matching_title: approximate_pattern_matching,
+    frequent_words_with_mismatches_title: frequent_words_with_mismatches,
 }
